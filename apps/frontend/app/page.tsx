@@ -1,5 +1,5 @@
 import { Suspense } from "react"
-import { getPeople } from "../services/api"
+import { getPeople } from "../lib/api"
 import HeroCard from "../components/hero-card"
 import PaginationControls from "../components/pagination-controls"
 import { SearchBar } from "../components/search-bar"
@@ -14,8 +14,8 @@ interface HeroesPageProps {
 }
 
 export default async function HeroesPage({ searchParams }: HeroesPageProps) {
-  const page = Number(searchParams.page) || 1
-  const search = searchParams.search || ""
+  const page = Number(searchParams?.page) || 1
+  const search = searchParams?.search || ""
 
   return (
     <div className="container mx-auto py-12 px-4">

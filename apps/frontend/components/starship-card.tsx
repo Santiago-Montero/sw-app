@@ -6,9 +6,9 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { getIdFromUrl } from "@/lib/utils"
-import type { Starship } from "@/types"
-import { Users, Gauge, Rocket, Briefcase } from "lucide-react"
+import { getIdFromUrl } from "../lib/utils"
+import type { Starship } from "../types"
+import { Rocket, Users, Film, Settings } from "lucide-react"
 
 interface StarshipCardProps {
   starship: Starship
@@ -22,11 +22,12 @@ export function StarshipCard({ starship, index, priority = false }: StarshipCard
 
   // Determinar el color de fondo basado en la clase de nave
   const getBgColor = () => {
-    const starshipClass = starship.starship_class.toLowerCase()
-    if (starshipClass.includes("fighter")) return "bg-red-50 dark:bg-red-950"
-    if (starshipClass.includes("destroyer") || starshipClass.includes("battle")) return "bg-gray-50 dark:bg-gray-900"
-    if (starshipClass.includes("transport") || starshipClass.includes("freighter")) return "bg-blue-50 dark:bg-blue-950"
-    return "bg-purple-50 dark:bg-purple-950"
+    const shipClass = starship.starship_class.toLowerCase()
+    if (shipClass.includes("fighter")) return "bg-red-50 dark:bg-red-950"
+    if (shipClass.includes("transport")) return "bg-blue-50 dark:bg-blue-950"
+    if (shipClass.includes("cruiser")) return "bg-purple-50 dark:bg-purple-950"
+    if (shipClass.includes("battleship")) return "bg-gray-50 dark:bg-gray-900"
+    return "bg-green-50 dark:bg-green-950"
   }
 
   return (
@@ -40,9 +41,9 @@ export function StarshipCard({ starship, index, priority = false }: StarshipCard
     >
       <Link href={`/starships/${starshipId}`}>
         <Card className={`overflow-hidden h-full transition-all duration-300 hover:shadow-lg ${getBgColor()}`}>
-          <div className="relative h-52 overflow-hidden">
+          <div className="relative h-48 overflow-hidden">
             <Image
-              src={`/placeholder.svg?height=500&width=800&text=${encodeURIComponent(starship.name)}`}
+              src={`/placeholder.svg?height=400&width=600&text=${encodeURIComponent(starship.name)}`}
               alt={starship.name}
               fill
               sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
@@ -50,40 +51,34 @@ export function StarshipCard({ starship, index, priority = false }: StarshipCard
               className="object-cover transition-transform duration-500"
               style={{ transform: isHovered ? "scale(1.05)" : "scale(1)" }}
             />
-            <div className="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent" />
-            <div className="absolute bottom-4 left-4 right-4">
-              <Badge className="mb-2">{starship.starship_class}</Badge>
-              <h3 className="text-xl font-bold text-white">{starship.name}</h3>
-              <p className="text-sm text-gray-200">{starship.model}</p>
-            </div>
+            <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
+            <h3 className="absolute bottom-4 left-4 text-xl font-bold text-white">{starship.name}</h3>
           </div>
 
           <CardContent className="pt-4">
             <div className="grid grid-cols-2 gap-2 mb-4">
               <div className="flex items-center gap-2">
-                <Gauge className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">
-                  {starship.max_atmosphering_speed !== "n/a" ? `${starship.max_atmosphering_speed} km/h` : "N/A"}
-                </span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">Tripulación: {starship.crew}</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Briefcase className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">Pasajeros: {starship.passengers}</span>
+                <Settings className="h-4 w-4 text-gray-500" />
+                <span className="text-sm">{starship.model}</span>
               </div>
               <div className="flex items-center gap-2">
                 <Rocket className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">Hyperdrive: {starship.hyperdrive_rating}</span>
+                <span className="text-sm">{starship.starship_class}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Users className="h-4 w-4 text-gray-500" />
+                <span className="text-sm">{starship.crew}</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Film className="h-4 w-4 text-gray-500" />
+                <span className="text-sm">{starship.films.length} películas</span>
               </div>
             </div>
           </CardContent>
 
           <CardFooter className="flex flex-wrap gap-2 pt-0">
-            <Badge variant="outline">{starship.manufacturer.split(",")[0]}</Badge>
-            <Badge>{starship.films.length} películas</Badge>
+            <Badge variant="outline">{starship.length} m</Badge>
+            <Badge>{starship.passengers} pasajeros</Badge>
           </CardFooter>
         </Card>
       </Link>

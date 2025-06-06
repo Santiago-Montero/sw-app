@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import { getPlanets } from "@/services/api"
-import { SearchBar } from "@/components/search-bar"
-import { LoadingPlanets } from "@/components/loading-planets"
-import { PlanetCard } from "@/components/planet-card"
-import PaginationControls from "@/components/pagination-controls"
-import { EarthIcon as PlanetIcon, Star } from "lucide-react"
+import { getPlanets } from "../../lib/api"
+import { SearchBar } from "../../components/search-bar"
+import { LoadingHeroes } from "../../components/loading-heroes"
+import { Star, Globe } from "lucide-react"
+import PaginationControls from "../../components/pagination-controls"
+import { PlanetCard } from "../../components/planet-card"
 
 interface PlanetsPageProps {
   searchParams: {
@@ -27,10 +27,10 @@ export default async function PlanetsPage({ searchParams }: PlanetsPageProps) {
         </div>
         <div className="w-24 h-1 bg-yellow-400 rounded-full mb-8"></div>
 
-        <SearchBar initialSearch={search} placeholder="Buscar planetas..." />
+        <SearchBar initialSearch={search} />
       </div>
 
-      <Suspense fallback={<LoadingPlanets />}>
+      <Suspense fallback={<LoadingHeroes />}>
         <PlanetsList page={page} search={search} />
       </Suspense>
     </div>
@@ -42,10 +42,10 @@ async function PlanetsList({ page, search }: { page: number; search: string }) {
     const { results: planets, count, next, previous } = await getPlanets(page, search)
     const totalPages = Math.ceil(count / 10)
 
-    if (!planets || planets.length === 0) {
+    if (planets.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-16">
-          <PlanetIcon className="h-16 w-16 text-gray-400 mb-4" />
+          <Globe className="h-16 w-16 text-gray-400 mb-4" />
           <h3 className="text-2xl font-medium text-gray-600">No se encontraron planetas</h3>
           {search && (
             <p className="text-gray-500 mt-2">No hay resultados para "{search}". Intenta con otra búsqueda.</p>
@@ -58,7 +58,12 @@ async function PlanetsList({ page, search }: { page: number; search: string }) {
       <>
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {planets.map((planet, index) => (
-            <PlanetCard key={planet.url} planet={planet} index={index} priority={index < 4} />
+            <PlanetCard
+              key={planet.url}
+              planet={planet}
+              index={index}
+              priority={index < 4}
+            />
           ))}
         </div>
 

@@ -6,9 +6,9 @@ import Link from "next/link"
 import { motion } from "framer-motion"
 import { Badge } from "@/components/ui/badge"
 import { Card, CardContent, CardFooter } from "@/components/ui/card"
-import { getIdFromUrl } from "@/lib/utils"
-import type { Planet } from "@/types"
-import { Users, Droplets, Thermometer, Mountain } from "lucide-react"
+import { getIdFromUrl } from "../lib/utils"
+import type { Planet } from "../types"
+import { Globe, Users, Film, MapPin } from "lucide-react"
 
 interface PlanetCardProps {
   planet: Planet
@@ -22,18 +22,12 @@ export function PlanetCard({ planet, index, priority = false }: PlanetCardProps)
 
   // Determinar el color de fondo basado en el clima
   const getBgColor = () => {
-    switch (planet.climate) {
-      case "arid":
-        return "bg-amber-50 dark:bg-amber-950"
-      case "temperate":
-        return "bg-green-50 dark:bg-green-950"
-      case "frozen":
-        return "bg-blue-50 dark:bg-blue-950"
-      case "murky":
-        return "bg-gray-50 dark:bg-gray-900"
-      default:
-        return "bg-purple-50 dark:bg-purple-950"
-    }
+    const climate = planet.climate.toLowerCase()
+    if (climate.includes("temperate")) return "bg-green-50 dark:bg-green-950"
+    if (climate.includes("arid")) return "bg-yellow-50 dark:bg-yellow-950"
+    if (climate.includes("frozen")) return "bg-blue-50 dark:bg-blue-950"
+    if (climate.includes("murky")) return "bg-gray-50 dark:bg-gray-900"
+    return "bg-purple-50 dark:bg-purple-950"
   }
 
   return (
@@ -64,27 +58,27 @@ export function PlanetCard({ planet, index, priority = false }: PlanetCardProps)
           <CardContent className="pt-4">
             <div className="grid grid-cols-2 gap-2 mb-4">
               <div className="flex items-center gap-2">
-                <Thermometer className="h-4 w-4 text-gray-500" />
+                <Globe className="h-4 w-4 text-gray-500" />
                 <span className="text-sm">{planet.climate}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Mountain className="h-4 w-4 text-gray-500" />
+                <MapPin className="h-4 w-4 text-gray-500" />
                 <span className="text-sm">{planet.terrain}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Droplets className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">{planet.surface_water}% agua</span>
+                <Users className="h-4 w-4 text-gray-500" />
+                <span className="text-sm">{planet.population}</span>
               </div>
               <div className="flex items-center gap-2">
-                <Users className="h-4 w-4 text-gray-500" />
-                <span className="text-sm">{planet.population !== "unknown" ? planet.population : "Desconocida"}</span>
+                <Film className="h-4 w-4 text-gray-500" />
+                <span className="text-sm">{planet.films.length} películas</span>
               </div>
             </div>
           </CardContent>
 
           <CardFooter className="flex flex-wrap gap-2 pt-0">
-            <Badge variant="outline">{planet.terrain.split(", ")[0]}</Badge>
-            <Badge>{planet.films.length} películas</Badge>
+            <Badge variant="outline">{planet.diameter} km</Badge>
+            <Badge>{planet.gravity}</Badge>
           </CardFooter>
         </Card>
       </Link>

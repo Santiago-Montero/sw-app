@@ -6,9 +6,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
 import { LoadingSpinner } from "@/components/loading-spinner"
-import { fetchPerson, fetchFilm, fetchPlanet, fetchStarship } from "@/lib/api"
+import { getPerson, getFilm, getPlanet, getStarship } from "../../../lib/api" 
 import type { People, Film, Planet, Starship } from "@/types"
 import { ArrowLeft, User, Calendar, Ruler, Weight, Eye, Palette, MapPin, FilmIcon, Rocket } from "lucide-react"
+import { getIdFromUrl } from "../../../lib/utils"
 
 export default function HeroDetailPage() {
   const params = useParams()
@@ -31,22 +32,22 @@ export default function HeroDetailPage() {
       setLoading(true)
       setError(null)
 
-      const heroData = await fetchPerson(id)
+      const heroData = await getPerson(id)
       setHero(heroData)
 
       // Cargar planeta natal
       if (heroData.homeworld) {
-        const planetData = await fetchPlanet(heroData.homeworld)
+        const planetData = await getPlanet(getIdFromUrl(heroData.homeworld))
         setHomeworld(planetData)
       }
 
       // Cargar películas
-      const filmPromises = heroData.films.slice(0, 5).map((url) => fetchFilm(url))
+      const filmPromises = heroData.films.slice(0, 5).map((url) => getFilm(getIdFromUrl(url)))
       const filmsData = await Promise.all(filmPromises)
       setFilms(filmsData)
 
       // Cargar naves
-      const starshipPromises = heroData.starships.slice(0, 5).map((url) => fetchStarship(url))
+      const starshipPromises = heroData.starships.slice(0, 5).map((url) => getStarship(getIdFromUrl(url)))
       const starshipsData = await Promise.all(starshipPromises)
       setStarships(starshipsData)
     } catch (err) {
@@ -186,8 +187,8 @@ export default function HeroDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {films.map((film) => (
-                <div key={film.url} className="border rounded-lg p-4">
+              {films.map((film, index) => (
+                <div key={index} className="border rounded-lg p-4">
                   <h3 className="font-semibold">{film.title}</h3>
                   <p className="text-sm text-muted-foreground">Episodio {film.episode_id}</p>
                   <p className="text-sm text-muted-foreground">{film.release_date}</p>
@@ -210,8 +211,8 @@ export default function HeroDetailPage() {
           </CardHeader>
           <CardContent>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-              {starships.map((starship) => (
-                <div key={starship.url} className="border rounded-lg p-4">
+              {starships.map((starship, index) => (
+                <div key={index} className="border rounded-lg p-4">
                   <h3 className="font-semibold">{starship.name}</h3>
                   <p className="text-sm text-muted-foreground">{starship.model}</p>
                   <p className="text-sm text-muted-foreground">Clase: {starship.starship_class}</p>

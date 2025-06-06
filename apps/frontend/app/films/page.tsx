@@ -1,10 +1,10 @@
 import { Suspense } from "react"
-import { getFilms } from "@/services/api"
-import { SearchBar } from "@/components/search-bar"
-import { LoadingFilms } from "@/components/loading-films"
-import { FilmCard } from "@/components/film-card"
-import PaginationControls from "@/components/pagination-controls"
-import { Film, Star } from "lucide-react"
+import { getFilms } from "../../lib/api"
+import { SearchBar } from "../../components/search-bar"
+import { LoadingHeroes } from "../../components/loading-heroes"
+import { Star, FilmIcon } from "lucide-react"
+import PaginationControls from "../../components/pagination-controls"
+import { FilmCard } from "../../components/film-card"
 
 interface FilmsPageProps {
   searchParams: {
@@ -15,7 +15,7 @@ interface FilmsPageProps {
 
 export default async function FilmsPage({ searchParams }: FilmsPageProps) {
   const page = Number(searchParams.page) || 1
-  const search = searchParams.search || "" 
+  const search = searchParams?.search || ""
 
   return (
     <div className="container mx-auto py-12 px-4">
@@ -27,10 +27,10 @@ export default async function FilmsPage({ searchParams }: FilmsPageProps) {
         </div>
         <div className="w-24 h-1 bg-yellow-400 rounded-full mb-8"></div>
 
-        <SearchBar initialSearch={search} placeholder="Buscar películas..." />
+        <SearchBar initialSearch={search} />
       </div>
 
-      <Suspense fallback={<LoadingFilms />}>
+      <Suspense fallback={<LoadingHeroes />}>
         <FilmsList page={page} search={search} />
       </Suspense>
     </div>
@@ -42,10 +42,10 @@ async function FilmsList({ page, search }: { page: number; search: string }) {
     const { results: films, count, next, previous } = await getFilms(page, search)
     const totalPages = Math.ceil(count / 10)
 
-    if (!films || films.length === 0) {
+    if (films.length === 0) {
       return (
         <div className="flex flex-col items-center justify-center py-16">
-          <Film className="h-16 w-16 text-gray-400 mb-4" />
+          <FilmIcon className="h-16 w-16 text-gray-400 mb-4" />
           <h3 className="text-2xl font-medium text-gray-600">No se encontraron películas</h3>
           {search && (
             <p className="text-gray-500 mt-2">No hay resultados para "{search}". Intenta con otra búsqueda.</p>
@@ -56,9 +56,14 @@ async function FilmsList({ page, search }: { page: number; search: string }) {
 
     return (
       <>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
           {films.map((film, index) => (
-            <FilmCard key={film.url} film={film} index={index} priority={index < 3} />
+            <FilmCard
+              key={film.url}
+              film={film}
+              index={index}
+              priority={index < 4}
+            />
           ))}
         </div>
 
