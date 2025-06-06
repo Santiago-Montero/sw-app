@@ -15,7 +15,7 @@ interface FilmsPageProps {
 
 export default async function FilmsPage({ searchParams }: FilmsPageProps) {
   const page = Number(searchParams.page) || 1
-  const search = searchParams.search || ""
+  const search = searchParams.search || "" 
 
   return (
     <div className="container mx-auto py-12 px-4">
