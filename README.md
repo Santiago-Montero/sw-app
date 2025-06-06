@@ -64,6 +64,15 @@ Esta aplicación es una plataforma que permite explorar el universo de Star Wars
 
 ### URLS
 
-- frontend: https://sw-f0bxg8p25-santiagomonteros-projects.vercel.app/ (desplegado en vercel)
+- frontend: https://sw-app-git-main-santiagomonteros-projects.vercel.app/ (desplegado en vercel)
 - backend: https://sw-app-h2lo.onrender.com/planet (desplegado en render)
 
+
+
+### Caracteristicas
+
+- Logs personalizados
+- Arquitectura hexagonal
+- Testing unitario y de integracion contra la api ( Ejemplo en usecases : Film )
+- Ui responsive 
+- Animaciones con framer motion
