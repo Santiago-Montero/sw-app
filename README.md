@@ -59,3 +59,11 @@ Esta aplicación es una plataforma que permite explorar el universo de Star Wars
 
 1. Ejecutar el servidor de desarrollo
 2. Ejecutar la app (npm run dev)
+
+
+
+### URLS
+
+- frontend: https://sw-f0bxg8p25-santiagomonteros-projects.vercel.app/ (desplegado en vercel)
+- backend: https://sw-app-h2lo.onrender.com/planet (desplegado en render)
+
