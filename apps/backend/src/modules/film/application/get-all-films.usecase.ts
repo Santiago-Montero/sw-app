@@ -17,13 +17,18 @@ export class GetAllFilmsUsecase implements IGetAllFilmsUsecase {
     private readonly logger: ILogger,
     @Inject(FILM_REPOSITORY_TOKEN)
     private readonly filmRepository: IFilmRepository,
-  ) {}
+  ) {
+    this.logger.setContext(GetAllFilmsUsecase.name);
+  }
 
   async execute(
     params: GetAllFilmsUsecaseParams,
   ): Promise<GetAllFilmsUsecaseResponse> {
     this.logger.info('[GetAllFilmsUsecase] - Getting all films');
     const response = await this.filmRepository.findAll(params);
+    this.logger.info(
+      `[GetAllFilmsUsecase] - Found ${response ? response.results.length : 0} films`,
+    );
     return response;
   }
 }
